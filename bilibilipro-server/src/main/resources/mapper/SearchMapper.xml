@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.SearchMapper">
+
+    <insert id="addSearch">
+        insert into search(search_content, search_num, create_time, update_time)
+        values(#{searchContent},#{searchNum},#{createTime},#{updateTime})
+    </insert>
+    <update id="updateSearch">
+        update search
+        <set>
+            <if test="searchNum!=null">
+                search_num = #{searchNum},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+            where search_id = #{searchId}
+    </update>
+</mapper>

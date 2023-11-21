@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.CommentMapper">
+    <insert id="publishComment" useGeneratedKeys="true" keyProperty="commentId">
+        insert into comment(uid, content, post_time, video_id, dynamic_id, father_id, total_father_id)
+        values(#{uid},#{content},#{postTime},#{videoId},#{dynamicId},#{fatherId},#{totalFatherId})
+    </insert>
+    <update id="updateComment">
+        update comment
+        <set>
+            <if test="uid!=null">
+                uid = #{uid},
+            </if>
+            <if test="content!=null and content!=''">
+                content = #{content},
+            </if>
+            <if test="postTime!=null">
+                post_time = #{postTime},
+            </if>
+            <if test="likeNum !=null">
+                like_num = #{likeNum},
+            </if>
+            <if test="videoId!=null">
+                video_id = #{videoId},
+            </if>
+            <if test="dynamicId != null">
+                dynamic_id = #{dynamicId},
+            </if>
+            <if test="fatherId != null">
+                father_id = #{fatherId},
+            </if>
+            <if test="totalFatherId != null">
+                total_father_id = #{totalFatherId},
+            </if>
+        </set>
+            where comment_id = #{commentId}
+    </update>
+    <select id="getCommentPageList" resultType="com.sjxm.entity.Comment">
+        select * from comment
+        <where>
+            <if test="videoId!=null">
+                and video_id = #{videoId}
+            </if>
+            <if test="dynamicId!=null">
+                and dynamic_id = #{dynamicId}
+            </if>
+        </where>
+    </select>
+</mapper>

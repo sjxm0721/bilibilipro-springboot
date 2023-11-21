@@ -1,0 +1,59 @@
+
+spring:
+  profiles:
+    active: dev
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+      driver-class-name: ${bilibilipro.datasource.driver-class-name}
+      url: jdbc:mysql://${bilibilipro.datasource.host}:${bilibilipro.datasource.port}/${bilibilipro.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: ${bilibilipro.datasource.username}
+      password: ${bilibilipro.datasource.password}
+  redis:
+    host: ${bilibilipro.redis.host}
+    port: ${bilibilipro.redis.port}
+    password: ${bilibilipro.redis.password}
+    database: ${bilibilipro.redis.database}
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+  mvc:
+    async:
+      request-timeout: 300000
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.sjxm.entity
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com:
+      sight:
+        mapper: debug
+        service: info
+        controller: info
+
+bilibilipro:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    secret-key: sjxm0721
+    # 设置jwt过期时间
+    ttl: 720000000
+    # 设置前端传递过来的令牌名称
+    token-name: token
+  alioss:
+    endpoint: ${bilibilipro.alioss.endpoint}
+    access-key-id: ${bilibilipro.alioss.access-key-id}
+    access-key-secret: ${bilibilipro.alioss.access-key-secret}
+    bucket-name: ${bilibilipro.alioss.bucket-name}
+server:
+  port: 8080
+

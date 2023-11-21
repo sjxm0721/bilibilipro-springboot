@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.LikeMapper">
+
+    <update id="updateLike">
+        update `like`
+        <set>
+            <if test="fromUid!=null">
+                from_uid = #{fromUid},
+            </if>
+            <if test="toUid!=null">
+                to_uid = #{toUid},
+            </if>
+            <if test="type !=null and type !=''">
+                type = #{type},
+            </if>
+            <if test="videoId !=null">
+                video_id = #{videoId},
+            </if>
+            <if test="dynamicId != null">
+                dynamic_id = #{dynamicId},
+            </if>
+            <if test="commentId != null">
+                comment_id = #{commentId},
+            </if>
+            <if test="barrageId != null">
+                barrage_id = #{barrageId},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+            where like_id = #{likeId}
+    </update>
+</mapper>

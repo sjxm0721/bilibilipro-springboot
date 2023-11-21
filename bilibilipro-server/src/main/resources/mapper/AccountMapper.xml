@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.AccountMapper">
+    <update id="updateAccount">
+        update account
+        <set>
+            <if test="password != null and password !='' ">
+                password = #{password},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="followNum != null">
+                follow_num = #{followNum},
+            </if>
+            <if test="fansNum != null">
+                fans_num = #{fansNum},
+            </if>
+            <if test="dynamicNum != null">
+                dynamic_num = #{dynamicNum},
+            </if>
+            <if test="accountBrief != null and accountBrief !='' ">
+                account_brief = #{accountBrief},
+            </if>
+            <if test="avatar != null and avatar != '' ">
+                avatar = #{avatar},
+            </if>
+            <if test="accountName != null and accountName !='' ">
+                account_name = #{accountName},
+            </if>
+            <if test="likeNum != null">
+                like_num = #{likeNum},
+            </if>
+            <if test="clickNum != null">
+                click_num = #{clickNum},
+            </if>
+        </set>
+        where uid = #{uid}
+    </update>
+</mapper>

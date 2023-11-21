@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.HistoryMapper">
+
+    <update id="updateHistory">
+        update history
+        <set>
+            <if test="createTime!=null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where uid = #{uid} and video_id = #{videoId}
+    </update>
+</mapper>

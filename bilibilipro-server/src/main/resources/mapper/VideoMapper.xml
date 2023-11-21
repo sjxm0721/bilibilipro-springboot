@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.VideoMapper">
+    <update id="updateVideo">
+        update video
+        <set>
+            <if test="title!=null and title!=''">
+                title = #{title},
+            </if>
+            <if test="src!=null and src!=''">
+                src = #{src},
+            </if>
+            <if test="postTime!=null">
+                post_time = #{postTime},
+            </if>
+            <if test="barrageNum!=null">
+                barrage_num = #{barrageNum},
+            </if>
+            <if test="lastTime!=null">
+                last_time = #{lastTime},
+            </if>
+            <if test="clickNum!=null">
+                click_num = #{clickNum},
+            </if>
+            <if test="uid!=null">
+                uid = #{uid},
+            </if>
+            <if test="videoBrief!=null and videoBrief!=''">
+                video_brief = #{videoBrief},
+            </if>
+            <if test="likeNum!=null">
+                like_num = #{likeNum},
+            </if>
+            <if test="coinNum!=null">
+                coin_num = #{coinNum},
+            </if>
+            <if test="favNum!=null">
+                fav_num = #{favNum},
+            </if>
+            <if test="tags!=null and tags!=''">
+                tags = #{tags},
+            </if>
+            <if test="commentNum!=null">
+                comment_num = #{commentNum},
+            </if>
+            <if test="poster!=null and poster!=''">
+                poster = #{poster},
+            </if>
+            <if test="inSuggest!=null and inSuggest!=''">
+                in_suggest = #{inSuggest},
+            </if>
+            <if test="inCarousel!=null and inCarousel!=''">
+                in_carousel = #{inCarousel},
+            </if>
+        </set>
+        where video_id = #{videoId}
+    </update>
+    <select id="pageQuery" resultType="com.sjxm.entity.Video">
+        select * from video
+        <where>
+            <if test="key!=null and key!=''">
+                and title like concat('%',#{key},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.MessageMapper">
+    <insert id="addMessage" keyProperty="messageId" useGeneratedKeys="true">
+        insert into message(from_uid, to_uid, content, post_time, is_read, type, video_id, dynamic_id, comment_id, barrage_id, is_system,now_comment_id)
+        values (#{fromUid},#{toUid},#{content},#{postTime},#{isRead},#{type},#{videoId},#{dynamicId},#{commentId},#{barrageId},#{isSystem},#{nowCommentId})
+    </insert>
+    <update id="updateMessage">
+        update message
+        <set>
+            <if test="fromUid!=null">
+                from_uid = #{fromUid},
+            </if>
+            <if test="toUid!=null">
+                to_uid = #{toUid},
+            </if>
+            <if test="content!=null and content!=''">
+                content = #{content},
+            </if>
+            <if test="postTime!=null">
+                post_time = #{postTime},
+            </if>
+            <if test="isRead!=null and isRead!=''">
+                is_read = #{isRead},
+            </if>
+            <if test="type!=null and type!=''">
+                type = #{type},
+            </if>
+            <if test="videoId!=null">
+                video_id = #{videoId},
+            </if>
+            <if test="dynamicId!=null">
+                dynamic_id = #{dynamicId},
+            </if>
+            <if test="commentId!=null">
+                comment_id = #{commentId},
+            </if>
+            <if test="barrageId!=null">
+                barrage_id = #{barrageId},
+            </if>
+            <if test="isSystem!=null and isSystem!=''">
+                is_system = #{isSystem},
+            </if>
+            <if test="nowCommentId!=null">
+                now_comment_id = #{nowCommentId},
+            </if>
+        </set>
+        where message_id = #{messageId}
+    </update>
+    <select id="getHistoryMessage" resultType="com.sjxm.entity.Message">
+        SELECT * FROM message
+        WHERE (
+        (from_uid = #{uid1} AND to_uid = #{uid2})
+        OR
+        (from_uid = #{uid2} AND to_uid = #{uid1})
+        )
+        AND type = '0'
+        AND TIMESTAMPDIFF(HOUR, post_time, NOW()) &lt; 168;
+    </select>
+    <select id="getLatestCommuUser1" resultType="com.sjxm.entity.MessageResult">
+        SELECT DISTINCT m.to_uid as uid,MAX(m.post_time) as latest_post_time
+        FROM message m
+        WHERE m.to_uid IN (
+            SELECT to_uid
+            FROM message
+            WHERE from_uid = #{uid}
+              AND type = '0'
+              AND post_time >= NOW() - INTERVAL 1 MONTH
+        ) AND m.from_uid = #{uid}
+        GROUP BY m.to_uid
+        ORDER BY latest_post_time DESC;
+    </select>
+    <select id="getLatestCommuUser2" resultType="com.sjxm.entity.MessageResult">
+        SELECT DISTINCT m.from_uid as uid,MAX(m.post_time) as latest_post_time
+        FROM message m
+        WHERE m.from_uid IN (
+            SELECT from_uid
+            FROM message
+            WHERE to_uid = #{uid}
+              AND type = '0'
+              AND post_time >= NOW() - INTERVAL 1 MONTH
+        ) AND m.to_uid = #{uid}
+        GROUP BY m.from_uid
+        ORDER BY latest_post_time DESC;
+    </select>
+</mapper>
+
+
+<!--        ORDER BY (SELECT MAX(post_time) FROM message WHERE to_uid = m.to_uid) DESC;-->
+
+
+<!--        ORDER BY (SELECT MAX(post_time) FROM message WHERE from_uid = m.from_uid) DESC;-->

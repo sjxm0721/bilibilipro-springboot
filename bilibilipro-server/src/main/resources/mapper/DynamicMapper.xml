@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.DynamicMapper">
+    <update id="updateDynamic">
+        update dynamic
+        <set>
+            <if test="uid!=null">
+                uid = #{uid},
+            </if>
+            <if test="postTime!=null">
+                post_time = #{postTime},
+            </if>
+            <if test="text!=null and text!=''">
+                text = #{text},
+            </if>
+            <if test="videoId!=null">
+                video_id = #{videoId},
+            </if>
+            <if test="likeNum!=null">
+                like_num = #{likeNum},
+            </if>
+            <if test="commentNum!=null">
+                comment_num = #{commentNum},
+            </if>
+        </set>
+        where dynamic_id = #{dynamicId}
+    </update>
+    <select id="getDynamicByUid" resultType="com.sjxm.entity.Dynamic">
+        select * from dynamic
+        <where>
+            <if test="uid!=null">
+                and uid = #{uid}
+            </if>
+        </where>
+    </select>
+</mapper>
