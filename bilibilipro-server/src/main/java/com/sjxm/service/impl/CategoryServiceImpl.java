@@ -81,13 +81,15 @@ public class CategoryServiceImpl implements CategoryService {
     public void transCategoryFromRedis2DB() {
         Set<String> keys = redisUtil.keys("category:categoryId=" + "*");
         JacksonObjectMapper om = new JacksonObjectMapper();
-        for (String key : keys) {
-            Object o = redisUtil.get(key);
-            CategoryVO categoryVO = om.convertValue(o, CategoryVO.class);
-            Category category = new Category();
-            BeanUtils.copyProperties(categoryVO,category);
-            categoryMapper.updateCategory(category);
-            redisUtil.del(key);
+        if (keys != null) {
+            for (String key : keys) {
+                Object o = redisUtil.get(key);
+                CategoryVO categoryVO = om.convertValue(o, CategoryVO.class);
+                Category category = new Category();
+                BeanUtils.copyProperties(categoryVO,category);
+                categoryMapper.updateCategory(category);
+                redisUtil.del(key);
+            }
         }
     }
 }

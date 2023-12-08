@@ -215,13 +215,15 @@ public class CommentServiceImpl implements CommentService {
     public void transCommentFromRedis2DB() {
         Set<String> keys = redisUtil.keys("comment:commentId=" + "*");
         JacksonObjectMapper om  = new JacksonObjectMapper();
-        for (String key : keys) {
-            Object o = redisUtil.get(key);
-            CommentVO commentVO = om.convertValue(o, CommentVO.class);
-            Comment comment = new Comment();
-            BeanUtils.copyProperties(commentVO,comment);
-            commentMapper.updateComment(comment);
-            redisUtil.del(key);
+        if (keys != null) {
+            for (String key : keys) {
+                Object o = redisUtil.get(key);
+                CommentVO commentVO = om.convertValue(o, CommentVO.class);
+                Comment comment = new Comment();
+                BeanUtils.copyProperties(commentVO,comment);
+                commentMapper.updateComment(comment);
+                redisUtil.del(key);
+            }
         }
     }
 

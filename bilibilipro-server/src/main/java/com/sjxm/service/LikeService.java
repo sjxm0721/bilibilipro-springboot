@@ -1,6 +1,7 @@
 package com.sjxm.service;
 
 import com.sjxm.dto.LikeDTO;
+import com.sjxm.result.PageResult;
 import com.sjxm.vo.LikeVO;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface LikeService {
     void cancel(LikeDTO likeDTO);
 
     void transLikeFromRedis2DB();
+
+    PageResult videoPage(Long uid, Integer page, Integer pageSize);
 }

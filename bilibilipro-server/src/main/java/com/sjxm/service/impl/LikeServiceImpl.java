@@ -1,9 +1,12 @@
 package com.sjxm.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sjxm.dto.LikeDTO;
 import com.sjxm.entity.Like;
 import com.sjxm.json.JacksonObjectMapper;
 import com.sjxm.mapper.LikeMapper;
+import com.sjxm.result.PageResult;
 import com.sjxm.service.*;
 import com.sjxm.utils.RedisUtil;
 import com.sjxm.vo.*;
@@ -356,28 +359,52 @@ public class LikeServiceImpl implements LikeService {
     public void transLikeFromRedis2DB() {
         Set<String> keys = redisUtil.keys("like:uid=" + "*");
         JacksonObjectMapper om = new JacksonObjectMapper();
-        for (String key : keys) {
-            Set<Object> objects = redisUtil.sGet(key);
-            if(objects !=null && !objects.isEmpty())
-            {
-                for (Object object : objects) {
-                    LikeVO likeVO = om.convertValue(object, LikeVO.class);
-                    Like like = new Like();
-                    BeanUtils.copyProperties(likeVO,like);
-                    Long likeId = like.getLikeId();
-                    if(likeId!=null){
-                        //更新
-                        likeMapper.updateLike(like);
+        if (keys != null) {
+            for (String key : keys) {
+                Set<Object> objects = redisUtil.sGet(key);
+                if(objects !=null && !objects.isEmpty())
+                {
+                    for (Object object : objects) {
+                        LikeVO likeVO = om.convertValue(object, LikeVO.class);
+                        Like like = new Like();
+                        BeanUtils.copyProperties(likeVO,like);
+                        Long likeId = like.getLikeId();
+                        if(likeId!=null){
+                            //更新
+                            likeMapper.updateLike(like);
+                        }
+                        else{
+                            //插入
+                            likeMapper.addLike(like);
+                        }
                     }
-                    else{
-                        //插入
-                        likeMapper.addLike(like);
-                    }
+                    redisUtil.del(key);
                 }
-                redisUtil.del(key);
             }
         }
         likeMapper.deleteLikeCanceled();
+    }
+
+    /**
+     * 获取点赞视频分页列表
+     * @param uid
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageResult videoPage(Long uid, Integer page, Integer pageSize) {
+        transLikeFromRedis2DB();
+        PageHelper.startPage(page,pageSize,"update_time desc");
+        Page<Like> pageResult = likeMapper.getLikeVideoByUid(uid);
+        List<Like> result = pageResult.getResult();
+        long total = pageResult.getTotal();
+        List<VideoVO> list = new ArrayList<>();
+        for (Like like : result) {
+            Long videoId = like.getVideoId();
+            list.add(videoService.info(videoId));
+        }
+        return new PageResult(total,list);
     }
 
 }

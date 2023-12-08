@@ -1,6 +1,7 @@
 package com.sjxm.controller.user;
 
 import com.sjxm.dto.LikeDTO;
+import com.sjxm.result.PageResult;
 import com.sjxm.result.Result;
 import com.sjxm.service.LikeService;
 import com.sjxm.vo.LikeVO;
@@ -21,6 +22,13 @@ public class LikeController implements Serializable {
 
     @Autowired
     private LikeService likeService;
+
+    @GetMapping("/videopage")
+    @ApiOperation("获取用户点赞视频分页列表")
+    public Result<PageResult> videoPage(Long uid,Integer page,Integer pageSize){
+        PageResult pageResult = likeService.videoPage(uid,page,pageSize);
+        return Result.success(pageResult);
+    }
 
     @GetMapping("/list")
     @ApiOperation("获取用户点赞数据列表")

@@ -34,7 +34,6 @@ public interface VideoMapper {
     @Select("select * from video where title like concat('%',#{searchContent},'%') ")
     Page<Video> getVideoSearchPageList(String searchContent);
 
-    @Insert("insert into video(title, src, post_time, barrage_num, last_time, click_num, uid, video_brief, like_num, coin_num, fav_num, tags, comment_num, poster) " +
-            " values(#{title},#{src},#{postTime},#{barrageNum},#{lastTime},#{clickNum},#{uid},#{videoBrief},#{likeNum},#{coinNum},#{favNum},#{tags},#{commentNum},#{poster}) ")
-    void addVideo(Video video);
+
+    Long addVideo(Video video);
 }

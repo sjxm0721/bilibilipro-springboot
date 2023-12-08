@@ -27,8 +27,20 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     protected void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(jwtTokenInterceptor)
-                .addPathPatterns("/user/account/**")
-                .excludePathPatterns("/user/account/login");
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/account/login")
+                .excludePathPatterns("/user/account/info")
+                .excludePathPatterns("/user/barrage/list")
+                .excludePathPatterns("/user/category/homecategory")
+                .excludePathPatterns("/user/comment/page")
+                .excludePathPatterns("/user/dynamic/page")
+                .excludePathPatterns("/user/search/list")
+                .excludePathPatterns("/user/video/page")
+                .excludePathPatterns("/user/video/homesuggest")
+                .excludePathPatterns("/user/video/info")
+                .excludePathPatterns("/user/video/search")
+                .excludePathPatterns("/user/common/uploadPic")
+        ;
     }
 
     /**
@@ -71,7 +83,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
 
     @Override
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
-        long timeout = 5 * 60 * 1000;// for example 5 minutes
+        long timeout = 4 * 1000;
         WebMvcConfiguration.super.configureAsyncSupport(configurer);
         configurer.setDefaultTimeout(timeout);
     }

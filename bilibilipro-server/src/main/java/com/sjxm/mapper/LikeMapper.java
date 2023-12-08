@@ -1,5 +1,6 @@
 package com.sjxm.mapper;
 
+import com.github.pagehelper.Page;
 import com.sjxm.entity.Like;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
@@ -22,4 +23,7 @@ public interface LikeMapper {
 
     @Delete("delete from `like` where status = '1'")
     void deleteLikeCanceled();
+
+    @Select("select * from `like` where from_uid = #{uid} and type = '0' and status = '0'")
+    Page<Like> getLikeVideoByUid(Long uid);
 }

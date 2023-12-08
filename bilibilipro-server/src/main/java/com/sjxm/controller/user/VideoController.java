@@ -83,10 +83,10 @@ public class VideoController {
 
     @PostMapping("/add")
     @ApiOperation("视频添加")
-    public Result add(@RequestBody VideoDTO videoDTO){
+    public Result<Long> add(@RequestBody VideoDTO videoDTO){
 
-        videoService.add(videoDTO);
-        return Result.success();
+        Long videoId = videoService.add(videoDTO);
+        return Result.success(videoId);
     }
 
 }

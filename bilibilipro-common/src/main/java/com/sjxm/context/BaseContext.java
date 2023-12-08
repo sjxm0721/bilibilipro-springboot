@@ -9,7 +9,7 @@ public class BaseContext {
 
     public static void setUID(Long id){ threadLocal.set(id);}
 
-    public static void getUID() {threadLocal.get();}
+    public static Long getUID() {return threadLocal.get();}
 
     public static void removeUID() {
         threadLocal.remove();

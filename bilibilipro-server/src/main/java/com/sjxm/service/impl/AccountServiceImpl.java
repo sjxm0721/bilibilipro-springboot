@@ -147,13 +147,15 @@ public class AccountServiceImpl implements AccountService {
     public void transAccountFromRedis2DB() {
         Set<String> keys = redisUtil.keys("account:uid=" + "*");
         JacksonObjectMapper om = new JacksonObjectMapper();
-        for (String key : keys) {
-            Object o = redisUtil.get(key);
-            AccountVO accountVO = om.convertValue(o, AccountVO.class);
-            Account account = new Account();
-            BeanUtils.copyProperties(accountVO,account);
-            accountMapper.updateAccount(account);
-            redisUtil.del(key);
+        if (keys != null) {
+            for (String key : keys) {
+                Object o = redisUtil.get(key);
+                AccountVO accountVO = om.convertValue(o, AccountVO.class);
+                Account account = new Account();
+                BeanUtils.copyProperties(accountVO,account);
+                accountMapper.updateAccount(account);
+                redisUtil.del(key);
+            }
         }
     }
 

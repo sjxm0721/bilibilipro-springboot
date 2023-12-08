@@ -8,10 +8,8 @@ import com.sjxm.mapper.VideoMapper;
 import com.sjxm.result.PageResult;
 import com.sjxm.service.MemberService;
 import com.sjxm.service.VideoService;
-import com.sjxm.utils.RedisUtil;
 import com.sjxm.vo.VideoVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +22,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private VideoMapper videoMapper;
-
-    @Autowired
-    private RedisUtil redisUtil;
 
     @Autowired
     private VideoService videoService;
@@ -43,7 +38,6 @@ public class MemberServiceImpl implements MemberService {
     public PageResult videopage(Long uid, Integer order, Integer page, Integer pageSize) {
 
         videoService.transVideoFromRedis2DB();
-
         List<String> orderBy = new ArrayList<>();
         orderBy.add("post_time desc");
         orderBy.add("click_num desc");
@@ -55,23 +49,10 @@ public class MemberServiceImpl implements MemberService {
         long total = pageResult.getTotal();
 
         List<VideoVO> list = new ArrayList<>();
-        JacksonObjectMapper om = new JacksonObjectMapper();
 
         for (Video video : result) {
-            Long videoId = video.getVideoId();
-            String redisKey = "video:videoId="+videoId;
-            Object o = redisUtil.get(redisKey);
-
-            if(o!=null){
-                VideoVO videoVO = om.convertValue(o, VideoVO.class);
-                list.add(videoVO);
-            }
-            else{
-                VideoVO videoVO = new VideoVO();
-                BeanUtils.copyProperties(video,videoVO);
-                redisUtil.set(redisKey,videoVO);
-                list.add(videoVO);
-            }
+            VideoVO videoVO = videoService.info(video.getVideoId());
+            list.add(videoVO);
         }
 
         return new PageResult(total,list);

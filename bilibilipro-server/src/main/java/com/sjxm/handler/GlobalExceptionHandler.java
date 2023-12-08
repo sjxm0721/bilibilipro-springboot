@@ -1,9 +1,6 @@
 package com.sjxm.handler;
 
-import com.sjxm.exception.AccountNotFoundException;
-import com.sjxm.exception.BaseException;
-import com.sjxm.exception.PasswordErrorException;
-import com.sjxm.exception.VideoNotFoundException;
+import com.sjxm.exception.*;
 import com.sjxm.result.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,11 +29,30 @@ public class GlobalExceptionHandler {
         return Result.error(ex.getMessage(),401);
     }
 
-    @ExceptionHandler({VideoNotFoundException.class})
+    @ExceptionHandler({
+         CategoryNotFoundException.class,
+         CommentNotFoundException.class,
+         DynamicNotFoundException.class,
+         FavNotFoundException.class,
+         MessageNotFoundException.class,
+         SearchNotFoundException.class,
+         VideoNotFoundException.class
+    })
+    public Result ResourceErrorExceptionHandler(Exception e){
+        log.info("资源异常:{}",e.getMessage());
+        return Result.error(e.getMessage(),555);
+    }
+
+    @ExceptionHandler({VideoUploadFailedException.class})
     public Result videoUploadExceptionHandler(Exception ex){
         log.error("视频上传异常：{}",ex.getMessage());
         return Result.error(ex.getMessage(),504);
     }
 
+    @ExceptionHandler({PicUploadFailedException.class})
+    public Result picUploadExceptionHandler(Exception ex){
+        log.error("图片上传异常：{}",ex.getMessage());
+        return Result.error(ex.getMessage(),505);
+    }
 
 }

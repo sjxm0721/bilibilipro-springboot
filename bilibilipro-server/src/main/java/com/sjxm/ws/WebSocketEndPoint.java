@@ -102,6 +102,21 @@ public class WebSocketEndPoint {
         if(isSystem == '1')
         {
             //系统消息
+
+            if(type=='5'){
+                //服务器处理视频完成
+                Message messageTmp = new Message();
+                BeanUtils.copyProperties(messageDTO,messageTmp);
+                messageTmp.setIsRead('0');
+                messageTmp.setPostTime(LocalDateTime.now());
+                messageMapper.addMessage(messageTmp);
+                MessageVO messageVO = new MessageVO();
+                BeanUtils.copyProperties(messageTmp,messageVO);
+                messageVO.setVideoUrl(messageDTO.getVideoUrl());
+                messageVO.setVideoLastTime(messageDTO.getVideoLastTime());
+                messageVO.setIsAll(false);
+                sendSpecificUserMsg(JSON.toJSONString(messageVO),messageVO.getToUid());
+            }
         }
         else{
             //普通消息

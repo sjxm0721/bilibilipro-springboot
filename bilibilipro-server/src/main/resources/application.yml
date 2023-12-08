@@ -17,11 +17,11 @@ spring:
     database: ${bilibilipro.redis.database}
   servlet:
     multipart:
-      max-file-size: 300MB
-      max-request-size: 300MB
+      max-file-size: 1024MB
+      max-request-size: 1024MB
   mvc:
     async:
-      request-timeout: 300000
+      request-timeout: 4000
     pathmatch:
       matching-strategy: ant_path_matcher
 

@@ -58,6 +58,10 @@ public class MessageVO implements Serializable {
 
     private Long nowCommentId;
 
+    private String videoUrl;
+
+    private Integer videoLastTime;
+
     public void setIsAll(boolean flag){
         this.isAll = flag;
     }

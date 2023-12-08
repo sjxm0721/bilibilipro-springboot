@@ -30,5 +30,5 @@ public interface VideoService {
 
     VideoInfoVO getVideoInfo(File file);
 
-    void add(VideoDTO videoDTO);
+    Long add(VideoDTO videoDTO);
 }

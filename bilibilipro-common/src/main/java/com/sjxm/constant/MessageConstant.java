@@ -23,6 +23,8 @@ public class MessageConstant {
 
     public static final String VIDEO_UPLOAD_FAILED = "视频上传失败";
 
+    public static final String PIC_UPLOAD_FAILED = "图片上传失败";
+
     public static final String CATEGORY_NOT_FOUND = "种类未发现";
 
 }

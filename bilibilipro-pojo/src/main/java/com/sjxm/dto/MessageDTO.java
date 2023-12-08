@@ -1,10 +1,16 @@
 package com.sjxm.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class MessageDTO implements Serializable {
 
     private Long fromUid;
@@ -29,6 +35,9 @@ public class MessageDTO implements Serializable {
 
     private Long nowCommentId;
 
+    private String videoUrl;
+
+    private Integer videoLastTime;
 
 
 }

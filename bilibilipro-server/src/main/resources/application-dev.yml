@@ -1,7 +1,7 @@
 bilibilipro:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    host: localhost
+    host: 43.138.245.107
     port: 3306
     database: bilibilipro
     username: root
@@ -12,7 +12,7 @@ bilibilipro:
     access-key-secret: m45MvpQQvYVjLoolF9C0hk2j3phSkn
     bucket-name: bilibilipropost
   redis:
-    host: localhost
+    host: 43.138.245.107
     port: 6379
     password: Wcy674648
     database: 0

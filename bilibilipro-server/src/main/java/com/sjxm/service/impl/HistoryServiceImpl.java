@@ -139,34 +139,36 @@ public class HistoryServiceImpl implements HistoryService {
     public void transHistoryFromRedis2DB(){
         Set<String> keys = redisUtil.keys("history:uid=" + "*");
         JacksonObjectMapper om = new JacksonObjectMapper();
-        for (String key : keys) {
-            Set<ZSetOperations.TypedTuple<Object>> typedTuples = redisUtil.zRangeWithScores(key, 0, -1);
-            if(!typedTuples.isEmpty()){
-                for (ZSetOperations.TypedTuple<Object> typedTuple : typedTuples) {
-                    Double score = typedTuple.getScore();
-                    Object value = typedTuple.getValue();
-                    Instant instant = null;
-                    if (score != null) {
-                        instant = Instant.ofEpochSecond(score.longValue());
-                    }
-                    ZoneId zoneId = ZoneId.systemDefault();
-                    LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
-                    HistoryRedisVO historyRedisVO = om.convertValue(value, HistoryRedisVO.class);
-                    History history = new History();
-                    BeanUtils.copyProperties(historyRedisVO,history);
-                    history.setCreateTime(localDateTime);
-                    History historyByUidAndVideoId = historyMapper.getHistoryByUidAndVideoId(history);
-                    if(historyByUidAndVideoId == null){
-                        //添加操作
-                        historyMapper.addHistory(history);
-                    }
-                    else{
-                        //更新操作
-                        historyMapper.updateHistory(history);
+        if (keys != null) {
+            for (String key : keys) {
+                Set<ZSetOperations.TypedTuple<Object>> typedTuples = redisUtil.zRangeWithScores(key, 0, -1);
+                if(!typedTuples.isEmpty()){
+                    for (ZSetOperations.TypedTuple<Object> typedTuple : typedTuples) {
+                        Double score = typedTuple.getScore();
+                        Object value = typedTuple.getValue();
+                        Instant instant = null;
+                        if (score != null) {
+                            instant = Instant.ofEpochSecond(score.longValue());
+                        }
+                        ZoneId zoneId = ZoneId.systemDefault();
+                        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+                        HistoryRedisVO historyRedisVO = om.convertValue(value, HistoryRedisVO.class);
+                        History history = new History();
+                        BeanUtils.copyProperties(historyRedisVO,history);
+                        history.setCreateTime(localDateTime);
+                        History historyByUidAndVideoId = historyMapper.getHistoryByUidAndVideoId(history);
+                        if(historyByUidAndVideoId == null){
+                            //添加操作
+                            historyMapper.addHistory(history);
+                        }
+                        else{
+                            //更新操作
+                            historyMapper.updateHistory(history);
+                        }
                     }
                 }
+                redisUtil.del(key);
             }
-            redisUtil.del(key);
         }
     }
 }

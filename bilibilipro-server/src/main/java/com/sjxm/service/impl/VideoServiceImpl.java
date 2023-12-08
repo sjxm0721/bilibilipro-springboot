@@ -7,6 +7,7 @@ import com.sjxm.dto.VideoDTO;
 import com.sjxm.dto.VideoPageDTO;
 import com.sjxm.entity.Video;
 import com.sjxm.exception.VideoNotFoundException;
+import com.sjxm.exception.VideoUploadFailedException;
 import com.sjxm.json.JacksonObjectMapper;
 import com.sjxm.mapper.VideoMapper;
 import com.sjxm.result.PageResult;
@@ -148,13 +149,15 @@ public class VideoServiceImpl implements VideoService {
     public void transVideoFromRedis2DB(){
         Set<String> keys = redisUtil.keys("video:videoId=" + "*");
         JacksonObjectMapper om = new JacksonObjectMapper();
-        for (String key : keys) {
-            Object o = redisUtil.get(key);
-            VideoVO videoVO = om.convertValue(o, VideoVO.class);
-            Video video = new Video();
-            BeanUtils.copyProperties(videoVO,video);
-            videoMapper.updateVideo(video);
-            redisUtil.del(key);
+        if (keys != null) {
+            for (String key : keys) {
+                Object o = redisUtil.get(key);
+                VideoVO videoVO = om.convertValue(o, VideoVO.class);
+                Video video = new Video();
+                BeanUtils.copyProperties(videoVO,video);
+                videoMapper.updateVideo(video);
+                redisUtil.del(key);
+            }
         }
     }
 
@@ -231,8 +234,7 @@ public class VideoServiceImpl implements VideoService {
             videoInfoVO.setSampleRate(grabber.getSampleRate());
             return videoInfoVO;
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new VideoUploadFailedException(MessageConstant.VIDEO_UPLOAD_FAILED);
         } finally {
             try {
                 if (grabber != null) {
@@ -250,19 +252,21 @@ public class VideoServiceImpl implements VideoService {
      * @param videoDTO
      */
     @Override
-    public void add(VideoDTO videoDTO) {
+    public Long add(VideoDTO videoDTO) {
 
         Video video = new Video();
         BeanUtils.copyProperties(videoDTO,video);
         Long[] tags = videoDTO.getTags();
 
-        StringJoiner joiner = new StringJoiner(",");
-        for (long value : tags) {
-            joiner.add(String.valueOf(value));
+        if(tags!=null&&tags.length>0){
+            StringJoiner joiner = new StringJoiner(",");
+            for (long value : tags) {
+                joiner.add(String.valueOf(value));
+            }
+
+            String newTags = joiner.toString();
+            video.setTags(newTags);
         }
-
-        String newTags = joiner.toString();
-
         video.setPostTime(LocalDateTime.now());
         video.setBarrageNum(0);
         video.setClickNum(0);
@@ -270,8 +274,7 @@ public class VideoServiceImpl implements VideoService {
         video.setCoinNum(0);
         video.setFavNum(0);
         video.setCommentNum(0);
-        video.setTags(newTags);
         videoMapper.addVideo(video);
-
+        return video.getVideoId();
     }
 }
