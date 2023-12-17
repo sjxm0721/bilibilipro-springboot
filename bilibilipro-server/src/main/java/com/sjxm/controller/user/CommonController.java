@@ -75,7 +75,6 @@ public class CommonController {
     @PostMapping("/uploadVideo")
     @ApiOperation("视频文件上传")
     public Result uploadVideo(MultipartFile file) throws IOException {
-        String originalFilename = file.getOriginalFilename();
         Long uid = BaseContext.getUID();
                 // 新文件名
                 String objectName = String.valueOf(UUID.randomUUID());
@@ -339,7 +338,7 @@ public class CommonController {
     private List<String> buildBBDownCommand(DlBilibiliVideoDTO dlBilibiliVideoDTO,String objectName) {
 
         List<String> command = new ArrayList<>();
-        command.add("/www/server/bbdown/BBDown");
+        command.add("BBDown");
         command.add(dlBilibiliVideoDTO.getBid());
         if(!dlBilibiliVideoDTO.getSessData().isEmpty()){
             command.add("-c");
@@ -377,8 +376,6 @@ public class CommonController {
         scheduler.shutdown();
         executorService.shutdown();
     }
-
-
 }
 
 

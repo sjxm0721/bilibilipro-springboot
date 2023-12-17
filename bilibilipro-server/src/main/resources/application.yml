@@ -21,7 +21,7 @@ spring:
       max-request-size: 1024MB
   mvc:
     async:
-      request-timeout: 4000
+      request-timeout: 3000
     pathmatch:
       matching-strategy: ant_path_matcher
 
@@ -35,11 +35,12 @@ mybatis:
 
 logging:
   level:
-    com:
-      sight:
-        mapper: debug
-        service: info
-        controller: info
+    com: warn
+  pattern:
+    console: "%d - %msg%n"
+  file:
+    path: /javaCode/log
+    name: spring.log
 
 bilibilipro:
   jwt:
