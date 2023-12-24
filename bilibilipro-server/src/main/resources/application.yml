@@ -33,14 +33,23 @@ mybatis:
     #开启驼峰命名
     map-underscore-to-camel-case: true
 
+#logging:
+#  level:
+#    com: info
+#  pattern:
+#    console: "%d - %msg%n"
+#  file:
+#    path: /javaCode/log
+#    name: spring.log
 logging:
   level:
-    com: warn
-  pattern:
-    console: "%d - %msg%n"
-  file:
-    path: /javaCode/log
-    name: spring.log
+    com:
+      sight:
+        mapper: debug
+        service: info
+        controller: info
+
+
 
 bilibilipro:
   jwt:

@@ -40,6 +40,7 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
                 .excludePathPatterns("/user/video/info")
                 .excludePathPatterns("/user/video/search")
                 .excludePathPatterns("/user/common/uploadPic")
+                .excludePathPatterns("/user/article/list")
         ;
     }
 

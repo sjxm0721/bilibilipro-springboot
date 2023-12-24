@@ -27,4 +27,6 @@ public class MessageConstant {
 
     public static final String CATEGORY_NOT_FOUND = "种类未发现";
 
+    public static final String ARTICLE_NOT_FOUND = "文章未找到";
+
 }

@@ -1,18 +1,18 @@
 bilibilipro:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    host: localhost
+    host: 43.138.245.107
     port: 3306
     database: bilibilipro
     username: root # your username
-    password: 123456 #your password
+    password: Wcy674648 #your password
   alioss:
     endpoint: oss-cn-beijing.aliyuncs.com
-    access-key-id: XXXXXXXX # your keyId
-    access-key-secret: XXXXXXXXX # your keySecret
+    access-key-id: LTAI5tSNp2vFSMDr66Sq9jUT # your keyId
+    access-key-secret: m45MvpQQvYVjLoolF9C0hk2j3phSkn # your keySecret
     bucket-name: bilibilipropost #your bucket name
   redis:
-    host: localhost
+    host: 43.138.245.107
     port: 6379
-    password: 123456 #your password
+    password: Wcy674648 #your password
     database: 0

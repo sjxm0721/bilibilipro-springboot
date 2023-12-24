@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjxm.mapper.ArticleMapper">
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="articleId">
+        insert into article(uid, post_time, title, content, poster, tags,category,brief)
+        values (#{uid},#{postTime},#{title},#{content},#{poster},#{tags},#{category},#{brief})
+    </insert>
+    <select id="list" resultType="com.sjxm.entity.Article">
+        select * from article
+        <where>
+            <if test="category!=null and category!=0">
+                and category = #{category}
+            </if>
+            <if test="uid!=null and uid!=0">
+                and uid = #{uid}
+            </if>
+            <if test="title!=null and title!=''">
+                and title like concat('%',#{title},'%')
+            </if>
+            <if test="chosedTime!=null and chosedTime!=0">
+                <choose>
+                    <when test="chosedTime == 1">
+                        and post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+                    </when>
+                    <when test="chosedTime == 2">
+                        and post_time >= DATE_SUB(NOW(), INTERVAL 48 HOUR)
+                    </when>
+                    <when test="chosedTime == 3">
+                        and post_time >= DATE_SUB(NOW(), INTERVAL 1 WEEK)
+                    </when>
+                    <when test="chosedTime == 4">
+                        and post_time >= DATE_SUB(NOW(), INTERVAL 1 MONTH)
+                    </when>
+                </choose>
+            </if>
+        </where>
+        <if test="chosedOrder!=null and chosedOrder!=0">
+            <choose>
+                <when test="chosedOrder == 1">
+                    order by post_time DESC;
+                </when>
+                <when test="chosedOrder == 2">
+                    order by comment_num DESC;
+                </when>
+                <when test="chosedOrder == 3">
+                    order by like_num DESC;
+                </when>
+            </choose>
+        </if>
+    </select>
+</mapper>
